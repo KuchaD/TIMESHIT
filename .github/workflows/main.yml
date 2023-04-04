@@ -31,10 +31,10 @@ jobs:
 
       # add .nojekyll file to tell GitHub pages to not treat this as a Jekyll project. (Allow files and folders starting with an underscore)
       - name: Add .nojekyll file
-        run: touch release/wwwroot/.nojekyll
+        run: touch dist/Web/wwwroot/.nojekyll
         
       - name: Change base-tag in index.html from / to TIMESHIT
-        run: sed -i 's/<base href="\/" \/>/<base href="\/TIMESHIT\/" \/>/g' release/wwwroot/index.html
+        run: sed -i 's/<base href="\/" \/>/<base href="\/TIMESHIT\/" \/>/g' dist/Web/wwwroot/index.html
       
       - name: Commit wwwroot to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
