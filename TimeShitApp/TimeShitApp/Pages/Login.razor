@@ -24,6 +24,7 @@
     </EditForm>
 </div>
 
+<div>@data</div>
 @code {
     public class LoginModel
     {
@@ -32,11 +33,11 @@
     }
     
     private LoginModel loginModel = new ();
-
+    private string data = string.Empty;
 
     private async Task HandleValidSubmit()
     {
-        var x = await TpService.GetData(loginModel.Username, loginModel.Password);
+        data = await TpService.GetTimes(loginModel.Username, loginModel.Password);
     }
 
 }
