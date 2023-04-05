@@ -1,0 +1,42 @@
+@page "/"
+@using TimeShit.Services.Interfaces
+@inject ITPService TpService;
+
+<div class="w-50 justify-content-center d-flex">
+    <EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit" class="needs-validation" novalidate>
+        <DataAnnotationsValidator/>
+
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <InputText id="username" @bind-Value="@loginModel.Username" class="form-control" required/>
+            <div class="invalid-feedback">Please enter your username.</div>
+            <ValidationMessage For="@(() => loginModel.Username)"/>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <InputText id="password" type="password" @bind-Value="@loginModel.Password" class="form-control" required/>
+            <div class="invalid-feedback">Please enter your password.</div>
+            <ValidationMessage For="@(() => loginModel.Password)"/>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Load Data</button>
+    </EditForm>
+</div>
+
+@code {
+    public class LoginModel
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+    
+    private LoginModel loginModel = new ();
+
+
+    private async Task HandleValidSubmit()
+    {
+        var x = await TpService.GetData(loginModel.Username, loginModel.Password);
+    }
+
+}
