@@ -1,0 +1,151 @@
+@page "/Time"
+@using TimeShitApp.Share
+@using Mediator
+@using TimeShitApp.Application
+@using BlazorDownloadFile
+@inject Blazored.SessionStorage.ISessionStorageService _sessionStorage;
+@inject IMediator _mediator
+@inject IBlazorDownloadFileService _blazorDownloadFileService;
+@inject NavigationManager _navigationManager;
+
+<div class="container">
+    <div class="row">
+        <div class="d-flex justify-content-center">
+            <div>
+                <RangePicker TValue="DateTime?[]" Picker="@DatePickerType.Date" OnChange="args => ChangeDateTime(args)"/>
+                <Button Type="@ButtonType.Primary" @onclick="LoadTimeSheet">Load TimeSheet</Button>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-between" > 
+        
+        <div class="col-4">
+            <Statistic Title="Total Hours" Value="@TotalHours"/>
+        </div>
+        <div class="col-8 d-flex justify-content-end align-items-center">
+            <Checkbox @bind-Checked="WholeHours">
+                Split additional hours by whole hour
+            </Checkbox>
+            <AntDesign.InputNumber @bind-Value="@AdditionalHours" />
+            <Button Type="@ButtonType.Primary" @onclick="CorrectHours">Correct hours</Button>
+            <Button Type="@ButtonType.Primary" @onclick="GenerateTimesheet">Generate Timesheet</Button>
+        </div>
+    </div>
+    <Table TItem="Share.Time" DataSource="@TimeList" PageSize="500" HidePagination RowClassName="@(_ => "editable-row")" Size=@TableSize.Small>
+        <PropertyColumn Property="c => c.Date">
+            <a>@context.Date.ToString("dd.MM.yyy")</a>
+        </PropertyColumn>
+        <PropertyColumn Property="c => c.Hours">
+            @if (EditId == context.Id)
+            {
+                <Input Type="text" @bind-Value="context.Hours" OnBlur="StopEdit" AutoFocus/>
+            }
+            else
+            {
+                <div class="editable-cell-value-wrap" style="padding-right:24px" @onclick="() => StartEdit(context.Id)">
+                    @context.Hours
+                </div>
+            }
+        </PropertyColumn>
+        <PropertyColumn Property="c => c.Task">
+        </PropertyColumn>
+        <PropertyColumn Property="c => c.Project">
+        </PropertyColumn>
+        <ActionColumn Title="Action">
+            <Popconfirm Title="Sure to delete?"
+                        OnConfirm="() => DeleteRow(context.Id)"
+                        OkText="Yes"
+                        CancelText="No">
+                <Button Danger>Delete</Button>
+            </Popconfirm>
+        </ActionColumn>
+
+    </Table>
+
+</div>
+
+@code {
+    public User User { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public IList<Share.Time> TimeList { get; set; }
+    public Guid? EditId { get; set; }
+    public double TotalHours { get; set; }
+    public double AdditionalHours { get; set; }
+    public bool WholeHours { get; set; }
+
+    void StartEdit(Guid id)
+    {
+        EditId = id;
+    }
+
+    void StopEdit()
+    {
+        EditId = null;
+        ReCalculateTotalHours();
+    }
+
+    void DeleteRow(Guid id)
+    {
+        TimeList = TimeList.Where(d => d.Id != id).ToArray();
+        ReCalculateTotalHours();
+    }
+
+    void ReCalculateTotalHours()
+    {
+        TotalHours = TimeList.Sum(d => d.Hours);
+    }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            User = await _sessionStorage.GetItemAsync<User>(StorageConstants.StorageUser);
+            if (User is null)
+            {
+                _navigationManager.NavigateTo("/");
+            }
+            StateHasChanged();
+        }
+    }
+
+    public async Task LoadTimeSheet()
+    {
+        var user = await _sessionStorage.GetItemAsync<User>(StorageConstants.StorageUser);
+        var credencial = await _sessionStorage.GetItemAsync<string>(StorageConstants.StorageCredentions);
+        var result = await _mediator.Send(new TimeDataRequest(StartDate, EndDate, user.id, credencial));
+
+        if (result.IsSuccess)
+        {
+            TimeList = result.Value.Times;
+            ReCalculateTotalHours();
+        }
+    }
+    
+    async Task CorrectHours()
+    {
+        var result = await _mediator.Send(new TimeRecalculationRequest(TimeList, AdditionalHours, WholeHours));
+        if (result.IsSuccess)
+        {
+            TimeList = result.Value.Times;
+            ReCalculateTotalHours();
+        }
+    }
+
+    async Task GenerateTimesheet()
+    {
+        var result = await _mediator.Send(new GenerateTimeSheetRequest(TimeList, User));
+        if (result.IsSuccess)
+        {
+            var file = result.Value;
+            var fileMame = $"TimeSheet_{TimeList.First().Date.ToString("yyyy_MM")}_{User.Surname}_{User.Name}.xlsx";
+            await _blazorDownloadFileService.DownloadFile(fileMame, file.Stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
+    }
+
+    public void ChangeDateTime(DateRangeChangedEventArgs args)
+    {
+        StartDate = args.Dates[0];
+        EndDate = args.Dates[1];
+    }
+}

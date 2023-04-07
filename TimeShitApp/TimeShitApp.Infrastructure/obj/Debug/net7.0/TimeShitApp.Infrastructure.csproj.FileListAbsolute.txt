@@ -1,0 +1,17 @@
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Infrastructure.deps.json
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Infrastructure.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Infrastructure.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.csproj.AssemblyReference.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.AssemblyInfoInputs.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.AssemblyInfo.cs
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/refint/TimeShitApp.Infrastructure.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/ref/TimeShitApp.Infrastructure.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Application.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Share.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Application.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/bin/Debug/net7.0/TimeShitApp.Share.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Infrastructure/obj/Debug/net7.0/TimeShitApp.Infrastructure.csproj.CopyComplete

@@ -1,15 +1,19 @@
-﻿@inherits LayoutComponentBase
+﻿@using TimeShitApp.Share
+@inherits LayoutComponentBase
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@inject NavigationManager NavigationManager
 
 <PageTitle>TimeShitApp</PageTitle>
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            @if (IsLogin)
+            {
+                <div class="mx-2">@User.Email</div>
+                <button type="submit" class="btn btn-warning" @onclick="ButtonClick">Logout</button>
+            }
         </div>
 
         <article class="content px-4">
@@ -17,3 +21,24 @@
         </article>
     </main>
 </div>
+
+@code{
+    public bool IsLogin { get; set; }
+    public User User { get; set; }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        User = await sessionStorage.GetItemAsync<User>(StorageConstants.StorageUser) ?? new User(string.Empty, string.Empty, string.Empty, string.Empty);
+        IsLogin = await sessionStorage.ContainKeyAsync(StorageConstants.StorageCredentions);
+        StateHasChanged();
+    } 
+    
+    private async Task ButtonClick(MouseEventArgs args){
+        await sessionStorage.RemoveItemAsync(StorageConstants.StorageCredentions);
+        IsLogin = false;
+        StateHasChanged();
+        NavigationManager.NavigateTo("/");
+        
+    }
+
+}

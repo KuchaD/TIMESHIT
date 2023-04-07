@@ -1,30 +1,52 @@
 @page "/"
-@using TimeShit.Services.Interfaces
-@inject ITPService TpService;
+@using Mediator
+@using Microsoft.Extensions.Options
+@using TimeShitApp.Application
+@using TimeShitApp.Options
+@inject IMediator _mediator;
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage;
+@inject IOptions<GeneralSetting> generalSetting;
+@inject NavigationManager NavigationManager
 
-<div class="w-50 justify-content-center d-flex">
-    <EditForm Model="@loginModel" OnValidSubmit="@HandleValidSubmit" class="needs-validation" novalidate>
-        <DataAnnotationsValidator/>
-
-        <div class="form-group">
-            <label for="username">Username:</label>
-            <InputText id="username" @bind-Value="@loginModel.Username" class="form-control" required/>
-            <div class="invalid-feedback">Please enter your username.</div>
-            <ValidationMessage For="@(() => loginModel.Username)"/>
+@if (isLogin)
+{
+    NavigationManager.NavigateTo("/time");
+}
+else
+{
+    <div class="w-100 d-flex justify-content-center">
+        <div class="w-50 justify-content-center d-flex row">
+            <h3 class="col-12">Login: </h3>
+            <div class="col-12">
+                <Form Model="@loginModel"
+                      OnFinish="HandleValidSubmit"
+                      LabelColSpan="8"
+                      WrapperColSpan="16">
+                    <FormItem Label="Email">
+                        <Input @bind-Value="@context.Username"/>
+                    </FormItem>
+                    <FormItem Label="Password">
+                        <InputPassword @bind-Value="@context.Password"/>
+                    </FormItem>
+                    <FormItem WrapperColOffset="8" WrapperColSpan="16">
+                        <Button Type="@ButtonType.Primary" HtmlType="submit">
+                            Submit
+                        </Button>
+                    </FormItem>
+                </Form>
+            </div>
+            <div class="col-12 mt-2">
+                @if (ErrorMessage is not null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        @ErrorMessage
+                    </div>
+                }
+            </div>
         </div>
+    </div>
+}
 
-        <div class="form-group">
-            <label for="password">Password:</label>
-            <InputText id="password" type="password" @bind-Value="@loginModel.Password" class="form-control" required/>
-            <div class="invalid-feedback">Please enter your password.</div>
-            <ValidationMessage For="@(() => loginModel.Password)"/>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Load Data</button>
-    </EditForm>
-</div>
-
-<div>@data</div>
 @code {
     public class LoginModel
     {
@@ -33,11 +55,33 @@
     }
     
     private LoginModel loginModel = new ();
-    private string data = string.Empty;
+    public bool isLogin { get; set; }
+    public string ErrorMessage { get; set; }
+    
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            isLogin = await sessionStorage.ContainKeyAsync(StorageConstants.StorageCredentions);
+            StateHasChanged(); 
+        }
+    } 
 
     private async Task HandleValidSubmit()
     {
-        data = await TpService.GetTimes(loginModel.Username, loginModel.Password);
-    }
+        var user = Utils.CreateBasicAuth(loginModel.Username, loginModel.Password);
+        var encryptUser = AesOperation.EncryptString(generalSetting.Value.EncryptionKey, user);
 
+        var result = await _mediator.Send(new UserDataRequest(loginModel.Username, loginModel.Password));
+
+        if (result.IsSuccess)
+        {
+            await sessionStorage.SetItemAsync(StorageConstants.StorageCredentions, encryptUser);
+            await sessionStorage.SetItemAsync(StorageConstants.StorageUser, result.Value.User);
+            NavigationManager.NavigateTo("/time");
+            return;
+        }
+
+        ErrorMessage = "Username or password is incorrect.";
+    }
 }

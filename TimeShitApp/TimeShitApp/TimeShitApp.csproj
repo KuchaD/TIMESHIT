@@ -7,8 +7,27 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="AntDesign" Version="0.14.4" />
+      <PackageReference Include="Autofac" Version="7.0.0" />
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+      <PackageReference Include="BlazorDownloadFile" Version="2.4.0.2" />
+      <PackageReference Include="Blazored.SessionStorage" Version="2.3.0" />
+      <PackageReference Include="Mediator.Abstractions" Version="2.2.0-preview.2" />
+      <PackageReference Include="Mediator.SourceGenerator" Version="2.2.0-preview.2">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Refit" Version="6.3.2" />
       <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TimeShitApp.Application\TimeShitApp.Application.csproj" />
+      <ProjectReference Include="..\TimeShitApp.Infrastructure\TimeShitApp.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Template" />
     </ItemGroup>
 
 </Project>

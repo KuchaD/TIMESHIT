@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "smQuGdbKe3becnBhX2HQjRAIWRj+GVfyLpA4fnV+drCw6Mhitn0lBNfL/i4+nM/EttOKDn/pgrcWK5vzbVod2g==",
+  "success": true,
+  "projectFilePath": "/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Share/TimeShitApp.Share.csproj",
+  "expectedPackageFiles": [
+    "/Users/david/.nuget/packages/autofac/7.0.0/autofac.7.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/autofac.extensions.dependencyinjection/8.0.0/autofac.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/6.0.0/microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/system.diagnostics.diagnosticsource/4.7.1/system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}

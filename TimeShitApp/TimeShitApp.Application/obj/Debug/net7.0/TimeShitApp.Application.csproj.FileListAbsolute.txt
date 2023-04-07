@@ -1,0 +1,15 @@
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.csproj.AssemblyReference.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.AssemblyInfoInputs.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.AssemblyInfo.cs
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.csproj.CoreCompileInputs.cache
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/bin/Debug/net7.0/TimeShitApp.Application.deps.json
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/bin/Debug/net7.0/TimeShitApp.Application.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/bin/Debug/net7.0/TimeShitApp.Application.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/refint/TimeShitApp.Application.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/ref/TimeShitApp.Application.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/bin/Debug/net7.0/TimeShitApp.Share.dll
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/bin/Debug/net7.0/TimeShitApp.Share.pdb
+/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/obj/Debug/net7.0/TimeShitApp.Application.csproj.CopyComplete

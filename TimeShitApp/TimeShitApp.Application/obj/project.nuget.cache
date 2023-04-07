@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "dgSpecHash": "BzDw+gWHo8d/UdXbNfg17oM0dfldAu1Zo/w3oiAGGTxNf2GJOwCcC3PZ/z7QYQdwKCoqH6pUAlBwYxZucmetfw==",
+  "success": true,
+  "projectFilePath": "/Users/david/git/TIMESHIT/TimeShitApp/TimeShitApp.Application/TimeShitApp.Application.csproj",
+  "expectedPackageFiles": [
+    "/Users/david/.nuget/packages/autofac/7.0.0/autofac.7.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/autofac.extensions.dependencyinjection/8.0.0/autofac.extensions.dependencyinjection.8.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/mediator.abstractions/2.2.0-preview.2/mediator.abstractions.2.2.0-preview.2.nupkg.sha512",
+    "/Users/david/.nuget/packages/microsoft.extensions.dependencyinjection.abstractions/6.0.0/microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/microsoft.extensions.options/6.0.0/microsoft.extensions.options.6.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/microsoft.extensions.primitives/6.0.0/microsoft.extensions.primitives.6.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/spreadcheetah/1.9.0/spreadcheetah.1.9.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/system.diagnostics.diagnosticsource/4.7.1/system.diagnostics.diagnosticsource.4.7.1.nupkg.sha512",
+    "/Users/david/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "/Users/david/.nuget/packages/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg.sha512"
+  ],
+  "logs": []
+}

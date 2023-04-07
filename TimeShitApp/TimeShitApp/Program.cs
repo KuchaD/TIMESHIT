@@ -1,24 +1,38 @@
 
+using System.Collections;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using BlazorDownloadFile;
+using Blazored.SessionStorage;
+using Mediator;
+using Microsoft.AspNetCore.Mvc;
 using Refit;
 using TimeShit;
 using TimeShit.Services;
-using TimeShit.Services.Interfaces;
+using TimeShitApp.Application;
+using TimeShitApp.Application.ServicesInterfaces;
 using TimeShitApp.Data;
+using TimeShitApp.Options;
+using TimeShitApp.Share;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
+    {
+        builder.RegisterModule(new AutofacApplicationModule());
+        builder.RegisterModule(new AutofacInfrastructureModule());
+    });
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddMediator();
+builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddAntDesign();
+builder.Services.AddOptions<GeneralSetting>().Bind(builder.Configuration.GetSection(nameof(GeneralSetting)));
+builder.Services.AddBlazorDownloadFile();
 
-builder.Services.AddScoped<ITPService, TPService>();
-builder.Services.AddTransient<BrowserDelegate>();
-builder.Services.AddRefitClient<IRefitTargetProcess>()
-    .ConfigureHttpClient(c =>
-    {
-        c.BaseAddress = new Uri(Constants.TPUrl);
-    }).AddHttpMessageHandler<BrowserDelegate>();
 
 var app = builder.Build();
 
