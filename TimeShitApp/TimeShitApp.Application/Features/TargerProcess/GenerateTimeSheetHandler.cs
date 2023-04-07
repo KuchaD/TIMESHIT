@@ -20,20 +20,20 @@ public sealed class GenerateTimeSheetHandler : IRequestHandler<GenerateTimeSheet
         await using (var spreadsheet = await Spreadsheet.CreateNewAsync(stream, cancellationToken: cancellationToken))
         {
             var worksheetOptions = new WorksheetOptions();
-            worksheetOptions.Column(1).Width = 14;
-            worksheetOptions.Column(2).Width = 5;
+            worksheetOptions.Column(1).Width = 15;
+            worksheetOptions.Column(2).Width = 15;
             worksheetOptions.Column(3).Width = 65;
-            worksheetOptions.Column(4).Width = 22;
-            worksheetOptions.Column(5).Width = 14;
-            worksheetOptions.Column(6).Width = 5;
+            worksheetOptions.Column(4).Width = 10;
+            worksheetOptions.Column(5).Width = 17;
+            worksheetOptions.Column(6).Width = 7;
             
-            var onlyBoard = new Style();
-            onlyBoard.Border.Bottom.BorderStyle = BorderStyle.Thin;
-            onlyBoard.Border.Top.BorderStyle = BorderStyle.Thin;
-            onlyBoard.Border.Left.BorderStyle = BorderStyle.Thin;
-            onlyBoard.Border.Right.BorderStyle = BorderStyle.Thin;
+            var onlyBorder = new Style();
+            onlyBorder.Border.Bottom.BorderStyle = BorderStyle.Thin;
+            onlyBorder.Border.Top.BorderStyle = BorderStyle.Thin;
+            onlyBorder.Border.Left.BorderStyle = BorderStyle.Thin;
+            onlyBorder.Border.Right.BorderStyle = BorderStyle.Thin;
             
-            var onlyBoardId = spreadsheet.AddStyle(onlyBoard);
+            var onlyBorderId = spreadsheet.AddStyle(onlyBorder);
             
             // A spreadsheet must contain at least one worksheet.
             await spreadsheet.StartWorksheetAsync("timesheet", worksheetOptions, cancellationToken);
@@ -49,14 +49,10 @@ public sealed class GenerateTimeSheetHandler : IRequestHandler<GenerateTimeSheet
             var rowOptions = new RowOptions { Height = 50 };
 
             var rowTitle = new List<Cell>();
-            rowTitle.Add(new Cell(string.Empty, titleStyleId));
-            rowTitle.Add(new Cell(string.Empty, titleStyleId));
+            spreadsheet.MergeCells("A1:F1");
             rowTitle.Add(new Cell("Timesheet", titleStyleId));
-            rowTitle.Add(new Cell(string.Empty, titleStyleId));
-            rowTitle.Add(new Cell(string.Empty, titleStyleId));
-            rowTitle.Add(new Cell(string.Empty, titleStyleId));
+                
             await spreadsheet.AddRowAsync(rowTitle, rowOptions, cancellationToken);
-            
             await spreadsheet.AddRowAsync(new []{new Cell(string.Empty)}, cancellationToken);
             
             //InfoRows
@@ -70,20 +66,20 @@ public sealed class GenerateTimeSheetHandler : IRequestHandler<GenerateTimeSheet
             
             var rowInfo1 = new List<Cell>();
             rowInfo1.Add(new Cell("Měsíc", infoStyleId));
-            rowInfo1.Add(new Cell(request.Times.First().Date.ToString("MM/yyyy"), onlyBoardId));
+            rowInfo1.Add(new Cell(request.Times.First().Date.ToString("MM.yyyy"), onlyBorderId));
             rowInfo1.Add(new Cell(string.Empty));
             rowInfo1.Add(new Cell(string.Empty));
             rowInfo1.Add(new Cell("Celkem hodin", infoStyleId));
-            rowInfo1.Add(new Cell(totalHours, onlyBoardId));
+            rowInfo1.Add(new Cell(totalHours, onlyBorderId));
             await spreadsheet.AddRowAsync(rowInfo1, cancellationToken);
             
             var rowInfo2 = new List<Cell>();
             rowInfo2.Add(new Cell("Jméno", infoStyleId));
-            rowInfo2.Add(new Cell($"{request.User.Name} {request.User.Surname}", onlyBoardId));
+            rowInfo2.Add(new Cell($"{request.User.Name} {request.User.Surname}", onlyBorderId));
             rowInfo2.Add(new Cell(string.Empty));
             rowInfo2.Add(new Cell(string.Empty));
             rowInfo2.Add(new Cell("Celkem MD", infoStyleId));
-            rowInfo2.Add(new Cell(totalHours / 8, onlyBoardId));
+            rowInfo2.Add(new Cell(totalHours / 8, onlyBorderId));
             
             await spreadsheet.AddRowAsync(rowInfo2, cancellationToken);
             await spreadsheet.AddRowAsync(new []{new Cell(string.Empty)}, cancellationToken);
@@ -101,21 +97,32 @@ public sealed class GenerateTimeSheetHandler : IRequestHandler<GenerateTimeSheet
             rowHeader.Add(new Cell(string.Empty, headerStyleId));
             
             await spreadsheet.AddRowAsync(rowHeader, cancellationToken);
+            var start = 7;
             for (var i = 0; i < request.Times.Count; i++)
             {
+                var numerRow = i + start;
+                var merge = $"D{numerRow}:F{numerRow}";
+                spreadsheet.MergeCells(merge);
+                
                 var time = request.Times[i];
                 // Cells are inserted row by row.
                 var row = new List<Cell>();
-                row.Add(new Cell(time.Date.ToString("dd.MM.yyyy")));
-                row.Add(new Cell(time.Hours));
-                row.Add(new Cell(time.Task));
-                row.Add(new Cell(time.Project));
-
+                row.Add(new Cell(time.Date.ToString("dd.MM.yyyy"), onlyBorderId));
+                row.Add(new Cell(time.Hours, onlyBorderId));
+                row.Add(new Cell(time.Task, onlyBorderId));
+                row.Add(new Cell(time.Project, onlyBorderId));
+                row.Add(new Cell(string.Empty, onlyBorderId));
+                row.Add(new Cell(string.Empty, onlyBorderId));
+                
                 // Rows are inserted from top to bottom.
                 await spreadsheet.AddRowAsync(row, cancellationToken);
             }
             var summaryStyle = new Style();
             summaryStyle.Fill.Color = Color.Tan;
+            summaryStyle.Border.Bottom.BorderStyle = BorderStyle.Thin;
+            summaryStyle.Border.Top.BorderStyle = BorderStyle.Thin;
+            summaryStyle.Border.Left.BorderStyle = BorderStyle.Thin;
+            summaryStyle.Border.Right.BorderStyle = BorderStyle.Thin;
             var summaryStyleId = spreadsheet.AddStyle(summaryStyle);
             
             var rowSummary = new List<Cell>();
@@ -124,10 +131,11 @@ public sealed class GenerateTimeSheetHandler : IRequestHandler<GenerateTimeSheet
             await spreadsheet.AddRowAsync(rowSummary, cancellationToken);
             
             await spreadsheet.AddRowAsync(new []{new Cell(string.Empty)}, cancellationToken);
+            
+            var mergeSummary = $"D{spreadsheet.NextRowNumber}:E{spreadsheet.NextRowNumber}";
+            spreadsheet.MergeCells(mergeSummary);
             await spreadsheet.AddRowAsync(new []
             {
-                new Cell(string.Empty), 
-                new Cell(string.Empty),
                 new Cell($"Datum schválení: {DateTime.Now.ToString("dd.MM.yyyy")}")
             }, cancellationToken);
             
